@@ -1,8 +1,8 @@
-import { CardProps } from '../src/components/card/card';
+import { OfferProps } from './components/offer/offer';
 import { Location } from '../src/components/location/location';
 
 
-export const DefaultLocations : Location[] = [
+export const DefaultLocations: Location[] = [
   { Name: 'Paris' },
   { Name: 'Cologne' },
   { Name: 'Brussels' },
@@ -11,50 +11,120 @@ export const DefaultLocations : Location[] = [
   { Name: 'Dusseldorf' }
 ];
 
-export const DefaultCards: CardProps[] = [
+export const DefaultOffers: OfferProps[] = [
   {
-    Status: 'Premium',
-    Price: 120,
-    Image: 'img/apartment-01.jpg',
-    Rating: 80,
-    Description: 'Beautiful & luxurious apartment at great location',
-    Type: 'Apartment',
-    IsBookmarked: false
+    id: '1',
+    title: 'Beautiful & luxurious apartment at great location',
+    type: 'Apartment',
+    price: 120,
+    city: {
+      name: 'Amsterdam',
+      location: {
+        latitude: 52.35514938496378,
+        longitude: 4.673877537499948,
+        zoom: 8
+      }
+    },
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8
+    },
+    isFavorite: false,
+    isPremium: true,
+    rating: 4,
+    previewImage: 'img/apartment-01.jpg'
   },
   {
-    Status: null,
-    Price: 80,
-    Image: 'img/room.jpg',
-    Rating: 80,
-    Description: 'Wood and stone place',
-    Type: 'Room',
-    IsBookmarked: true
+    id: '2',
+    title: 'Wood and stone place',
+    type: 'Room',
+    price: 80,
+    city: {
+      name: 'Amsterdam',
+      location: {
+        latitude: 52.35514938496378,
+        longitude: 4.673877537499948,
+        zoom: 8
+      }
+    },
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8
+    },
+    isFavorite: true,
+    isPremium: false,
+    rating: 4,
+    previewImage: 'img/room.jpg'
   },
   {
-    Status: null,
-    Price: 132,
-    Image: 'img/apartment-02.jpg',
-    Rating: 80,
-    Description: 'Canal View Prinsengracht',
-    Type: 'Apartment',
-    IsBookmarked: false
+    id: '3',
+    title: 'Canal View Prinsengracht',
+    type: 'Apartment',
+    price: 132,
+    city: {
+      name: 'Amsterdam',
+      location: {
+        latitude: 52.35514938496378,
+        longitude: 4.673877537499948,
+        zoom: 8
+      }
+    },
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8
+    },
+    isFavorite: false,
+    isPremium: false,
+    rating: 4,
+    previewImage: 'img/apartment-02.jpg'
   },
   {
-    Status: 'Premium',
-    Price: 180,
-    Image: 'img/apartment-03.jpg',
-    Rating: 100,
-    Description: 'Nice, cozy, warm big bed apartment',
-    Type: 'Apartment',
-    IsBookmarked: false
+    id: '4',
+    title: 'Nice, cozy, warm big bed apartment',
+    type: 'apartment',
+    price: 180,
+    city: {
+      name: 'Amsterdam',
+      location: {
+        latitude: 52.35514938496378,
+        longitude: 4.673877537499948,
+        zoom: 8
+      }
+    },
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8
+    },
+    isFavorite: false,
+    isPremium: true,
+    rating: 5,
+    previewImage: 'img/apartment-03.jpg'
   },
   {
-    Status: null,
-    Price: 80,
-    Image: 'img/room.jpg',
-    Rating: 80,
-    Description: 'Wood and stone place',
-    Type: 'Room',
-    IsBookmarked: true
+    id: '5',
+    title: 'Wood and stone place',
+    type: 'Room',
+    price: 80,
+    city: {
+      name: 'Amsterdam',
+      location: {
+        latitude: 52.35514938496378,
+        longitude: 4.673877537499948,
+        zoom: 8
+      }
+    },
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8
+    },
+    isFavorite: true,
+    isPremium: false,
+    rating: 4,
+    previewImage: 'img/room.jpg'
   }
 ];

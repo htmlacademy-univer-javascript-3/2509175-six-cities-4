@@ -1,11 +1,13 @@
 import { DefaultLocations } from '../../params';
-import Card from '../../components/card/card';
-import { CardProps } from '../../components/card/card';
+import { DefaultOffers } from '../../params';
+
+import Offer from '../../components/offer/offer';
+import { OfferProps } from '../../components/offer/offer';
 import { Location } from '../../components/location/location';
 
 
-export type ListCardsProps = {
-    cards: CardProps[];
+export type ListOffersProps = {
+    offers: OfferProps[];
 }
 
 export type ListLocationsProps = {
@@ -33,19 +35,37 @@ function ListLocations({locations}: ListLocationsProps): JSX.Element {
   );
 }
 
-function ListCards({ cards }: ListCardsProps): JSX.Element {
+function ListOffers({ offers }: ListOffersProps): JSX.Element {
   return (
     <div className="cities__places-list places__list tabs__content">
       {
-        cards.map((card) => (
-          <Card {...card} />
+
+        offers.map((offer) => (
+          <Offer {...offer} />
         ))
       }
     </div>
   );
 }
 
-function MainScreen({ cards }: ListCardsProps): JSX.Element {
+function ListCountOffers({ count }: {count: number}): JSX.Element {
+  return (
+    <div className="cities__places-list places__list tabs__content">
+      {
+        [...Array(count)].map((e, i) => (
+          <Offer {...DefaultOffers[0]} />
+        ))
+      }
+    </div>
+  );
+}
+
+/*
+function MainScreen({ offers }: ListOffersProps): JSX.Element {
+<ListOffers offers={offers} />
+*/
+
+function MainScreen({ count }: {count: number}): JSX.Element {
   return (
     <main className="page__main page__main--index">
       <h1 className="visually-hidden">Cities</h1>
@@ -70,7 +90,9 @@ function MainScreen({ cards }: ListCardsProps): JSX.Element {
                 <li className="places__option" tabIndex={0}>Top rated first</li>
               </ul>
             </form>
-            <ListCards cards={cards} />
+
+            <ListCountOffers count={count} />
+
           </section>
           <div className="cities__right-section">
             <section className="cities__map map"></section>
