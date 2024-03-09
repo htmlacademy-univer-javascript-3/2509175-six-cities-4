@@ -22,11 +22,12 @@ function ListLocations({locations}: ListLocationsProps): JSX.Element {
         <ul className="locations__list tabs__list">
           {
             locations.map((location) =>
-              (<li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>{location.Name}</span>
-                </a>
-              </li>)
+              (
+                <li className="locations__item" key={location.Name}>
+                  <a className="locations__item-link tabs__item" href="#">
+                    <span>{location.Name}</span>
+                  </a>
+                </li>)
             )
           }
         </ul>
@@ -35,35 +36,17 @@ function ListLocations({locations}: ListLocationsProps): JSX.Element {
   );
 }
 
-function ListOffers({ offers }: ListOffersProps): JSX.Element {
-  return (
-    <div className="cities__places-list places__list tabs__content">
-      {
-
-        offers.map((offer) => (
-          <Offer {...offer} />
-        ))
-      }
-    </div>
-  );
-}
-
 function ListCountOffers({ count }: {count: number}): JSX.Element {
   return (
     <div className="cities__places-list places__list tabs__content">
       {
-        [...Array(count)].map((e, i) => (
-          <Offer {...DefaultOffers[0]} />
+        [...Array<number>(count)].map((e) => (
+          <Offer {...DefaultOffers[0]} key={e}/>
         ))
       }
     </div>
   );
 }
-
-/*
-function MainScreen({ offers }: ListOffersProps): JSX.Element {
-<ListOffers offers={offers} />
-*/
 
 function MainScreen({ count }: {count: number}): JSX.Element {
   return (
