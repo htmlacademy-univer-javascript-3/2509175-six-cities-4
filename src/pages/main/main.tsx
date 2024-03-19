@@ -1,21 +1,10 @@
-import { DefaultLocations } from '../../params';
-import { DefaultOffers } from '../../params';
-
+import { useState } from 'react';
 import Offer from '../../components/offer/offer';
 import { OfferProps } from '../../components/offer/offer';
-import { Location } from '../../components/location/location';
+import { LocationProps } from '../../components/location/location';
 
 
-export type ListOffersProps = {
-    offers: OfferProps[];
-}
-
-export type ListLocationsProps = {
-    locations: Location[];
-}
-
-
-function ListLocations({locations}: ListLocationsProps): JSX.Element {
+function ListLocations({ locations }: { locations: LocationProps[] }): JSX.Element {
   return (
     <div className="tabs">
       <section className="locations container">
@@ -36,23 +25,25 @@ function ListLocations({locations}: ListLocationsProps): JSX.Element {
   );
 }
 
-function ListCountOffers({ count }: {count: number}): JSX.Element {
+function ListOffers({ offers }: {offers: OfferProps[]}): JSX.Element {
+  const [activeOffer, setActiveOffer] = useState(offers[0]);
+  console.log(activeOffer.id);
   return (
     <div className="cities__places-list places__list tabs__content">
       {
-        [...Array<number>(count)].map((e) => (
-          <Offer {...DefaultOffers[0]} key={e}/>
+        offers.map((e) => (
+          <Offer offer={e} setState={() => setActiveOffer(e)} key={e.id}/>
         ))
       }
     </div>
   );
 }
 
-function MainScreen({ count }: {count: number}): JSX.Element {
+function MainScreen({ offers, locations }: { offers: OfferProps[]; locations: LocationProps[] }): JSX.Element {
   return (
     <main className="page__main page__main--index">
       <h1 className="visually-hidden">Cities</h1>
-      <ListLocations locations={DefaultLocations}/>
+      <ListLocations locations={locations}/>
       <div className="cities">
         <div className="cities__places-container container">
           <section className="cities__places places">
@@ -73,9 +64,7 @@ function MainScreen({ count }: {count: number}): JSX.Element {
                 <li className="places__option" tabIndex={0}>Top rated first</li>
               </ul>
             </form>
-
-            <ListCountOffers count={count} />
-
+            <ListOffers offers={offers} />
           </section>
           <div className="cities__right-section">
             <section className="cities__map map"></section>

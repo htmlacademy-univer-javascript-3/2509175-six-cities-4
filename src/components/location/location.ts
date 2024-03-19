@@ -1,3 +1,3 @@
-export type Location = {
+export type LocationProps = {
     Name: string;
 }
