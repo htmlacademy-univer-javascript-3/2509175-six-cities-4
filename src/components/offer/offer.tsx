@@ -11,41 +11,84 @@ function Premium({ isPremium }: OfferProps): false | JSX.Element {
   );
 }
 
-function Offer(props: OfferProps): JSX.Element {
-  const offerLink = `/offer/${props.id}`;
+function Offer({ offer, setState }: { offer: OfferProps; setState: () => void }): JSX.Element {
+  const offerLink = `/offer/${offer.id}`;
   return (
-    <article className="cities__card place-card">
-      <Premium {...props} />
+    <article className="cities__card place-card" onMouseOver={setState}>
+      <Premium {...offer} />
       <div className="cities__image-wrapper place-card__image-wrapper">
         <Link to={offerLink}>
-          <img className="place-card__image" src={props.previewImage} width="260" height="200" alt="Place image" />
+          <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt="Place image" />
         </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{props.price}</b>
+            <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button className="place-card__bookmark-button button" type="button">
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
-            <span className="visually-hidden">{props.isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
+            <span className="visually-hidden">{offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
           </button>
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: props.rating * 20 }}></span>
+            <span style={{ width: offer.rating * 20 }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
           <Link to={offerLink}>
-            {props.title}
+            {offer.title}
           </Link>
         </h2>
-        <p className="place-card__type">{props.type}</p>
+        <p className="place-card__type">{offer.type}</p>
+      </div>
+    </article>
+  );
+}
+
+export function FavoriteOffer({ offer }: { offer: OfferProps }): JSX.Element {
+  const offerLink = `/offer/${offer.id}`;
+  return (
+    <article className="favorites__card place-card">
+      <Premium {...offer} />
+      <div className="favorites__image-wrapper place-card__image-wrapper">
+        <Link to={offerLink}>
+          <img className="place-card__image" src={offer.previewImage} width="150" height="110" alt="Place image" />
+        </Link>
+      </div>
+      <div className="favorites__card-info place-card__info">
+        <div className="place-card__price-wrapper">
+          <div className="place-card__price">
+            <b className="place-card__price-value">&euro;{offer.price}</b>
+            <span
+              className="place-card__price-text"
+            >&#47;&nbsp;night
+            </span>
+          </div>
+          <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
+            <svg className="place-card__bookmark-icon" width="18" height="19">
+              <use xlinkHref="#icon-bookmark"></use>
+            </svg>
+            <span className="visually-hidden">{offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
+          </button>
+        </div>
+        <div className="place-card__rating rating">
+          <div className="place-card__stars rating__stars">
+            <span style={{ width: offer.rating * 20 }}></span>
+            <span className="visually-hidden">Rating</span>
+          </div>
+        </div>
+        <h2 className="place-card__name">
+          <Link to={offerLink}>
+            {offer.title}
+          </Link>
+        </h2>
+        <p className="place-card__type">{offer.type}</p>
       </div>
     </article>
   );

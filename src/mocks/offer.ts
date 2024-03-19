@@ -1,15 +1,5 @@
-import { OfferProps } from './components/offer/offer';
-import { Location } from '../src/components/location/location';
+import { OfferProps } from '../components/offer/offer';
 
-
-export const DefaultLocations: Location[] = [
-  { Name: 'Paris' },
-  { Name: 'Cologne' },
-  { Name: 'Brussels' },
-  { Name: 'Amsterdam' },
-  { Name: 'Hamburg' },
-  { Name: 'Dusseldorf' }
-];
 
 export const DefaultOffers: OfferProps[] = [
   {
