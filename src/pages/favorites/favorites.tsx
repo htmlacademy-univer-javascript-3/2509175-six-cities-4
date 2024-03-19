@@ -24,12 +24,14 @@ function ListCityFavoriteOffers({ offers }: { offers: OfferProps[] }): JSX.Eleme
 }
 
 function ListFavoriteOffers({ offers }: {offers: OfferProps[]}): JSX.Element {
-  const offersByCities: Partial<Record<string, OfferProps[]>> = Object.groupBy(offers, (offer: OfferProps) => offer.city.name);
+  // todo const offersByCitiesPartial: Partial<Record<string, OfferProps[]>> = Object.groupBy(offers, (offer: OfferProps) => offer.city.name);
+  const offersByCities = [offers]; // todo Object.values(offersByCitiesPartial);
+  // в гите валится джоба, потому что в версии тс нету групБай
   return (
     <ul className="favorites__list">
       {
-        Object.values(offersByCities).map((offersByCity) => (
-          <ListCityFavoriteOffers offers={offersByCity as OfferProps[]} key={(offersByCity as OfferProps[])[0].city.name}/>
+        offersByCities.map((offersByCity) => (
+          <ListCityFavoriteOffers offers={offersByCity } key={(offersByCity)[0].city.name}/>
         ))
       }
     </ul>

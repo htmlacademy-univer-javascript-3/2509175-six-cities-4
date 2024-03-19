@@ -1,7 +1,7 @@
-import { Location } from '../../src/components/location/location';
+import { LocationProps } from '../../src/components/location/location';
 
 
-export const DefaultLocations: Location[] = [
+export const DefaultLocations: LocationProps[] = [
   { Name: 'Paris' },
   { Name: 'Cologne' },
   { Name: 'Brussels' },
