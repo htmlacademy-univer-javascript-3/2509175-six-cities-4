@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { MapProps } from '../../mocks/location';
 
 function Premium({ isPremium }: OfferProps): false | JSX.Element {
   return (
@@ -11,7 +10,7 @@ function Premium({ isPremium }: OfferProps): false | JSX.Element {
   );
 }
 
-export function OfferInfo({ offer, offerLink }: {offer: OfferProps, offerLink: string}): JSX.Element {
+export function OfferInfo({ offer, offerLink }: { offer: OfferProps; offerLink: string }): JSX.Element {
   return (
     <div className="place-card__info">
       <div className="place-card__price-wrapper">
@@ -39,7 +38,7 @@ export function OfferInfo({ offer, offerLink }: {offer: OfferProps, offerLink: s
       </h2>
       <p className="place-card__type">{offer.type}</p>
     </div>
-  )
+  );
 }
 
 function Offer({ offer, setState }: { offer: OfferProps; setState: () => void }): JSX.Element {
@@ -100,6 +99,12 @@ export function FavoriteOffer({ offer }: { offer: OfferProps }): JSX.Element {
   );
 }
 
+type OfferLocation = {
+  latitude: number;
+  longitude: number;
+  zoom: number;
+}
+
 export type OfferProps = {
   id: string;
   title: string;
@@ -107,9 +112,9 @@ export type OfferProps = {
   price: number;
   city: {
     name: string;
-    location: MapProps;
+    location: OfferLocation;
   };
-  location: MapProps;
+  location: OfferLocation;
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;
@@ -117,16 +122,16 @@ export type OfferProps = {
 }
 
 export type OfferWithDetailsProps = OfferProps & {
-  description: string,
-  bedrooms: number,
-  goods: string[],
+  description: string;
+  bedrooms: number;
+  goods: string[];
   host: {
-    name: string,
-    avatarUrl: string,
-    isPro: boolean
-  },
-  images: string[],
-  maxAdults: number
+    name: string;
+    avatarUrl: string;
+    isPro: boolean;
+  };
+  images: string[];
+  maxAdults: number;
 };
 
 export default Offer;

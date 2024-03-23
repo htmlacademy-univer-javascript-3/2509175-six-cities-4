@@ -9,9 +9,9 @@ import { PrivateRoute } from '../private-route/private-route';
 import { UserAuthState } from '../private-route/userAuthState';
 
 import { OfferProps } from '../../components/offer/offer';
-import { LocationProps } from '../location/location';
+import { City } from '../location/map';
 
-export default function App(props: { offers: OfferProps[]; locations: LocationProps[] }): JSX.Element {
+export default function App(props: { offers: OfferProps[]; locations: City[] }): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>

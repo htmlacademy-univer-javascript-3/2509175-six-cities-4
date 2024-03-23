@@ -45,10 +45,10 @@ function Host(offer: OfferWithDetailsProps): JSX.Element {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
-function Reviews(offer: OfferWithDetailsProps): JSX.Element {
+function Reviews(): JSX.Element {
   return (
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">1</span></h2>
@@ -78,7 +78,7 @@ function Reviews(offer: OfferWithDetailsProps): JSX.Element {
       </ul>
       <ReviewForm />
     </section>
-  )
+  );
 }
 
 function NearPlace(offer: OfferProps): JSX.Element {
@@ -92,7 +92,7 @@ function NearPlace(offer: OfferProps): JSX.Element {
       </div>
       <OfferInfo offer={offer} offerLink={offerLink} />
     </article>
-  )
+  );
 }
 
 function ListNearPlaces(): JSX.Element {
@@ -103,12 +103,12 @@ function ListNearPlaces(): JSX.Element {
         <h2 className="near-places__title">Other places in the neighbourhood</h2>
         <div className="near-places__list places__list">
           {
-            nearPlacesMock.map((place) => (<NearPlace {...place} id={place.id} />))
+            nearPlacesMock.map((place) => (<NearPlace {...place} key={place.id}/>))
           }
         </div>
       </section>
     </div>
-  )
+  );
 }
 
 function ListGoods({ goods }: OfferWithDetailsProps): JSX.Element {
@@ -117,18 +117,18 @@ function ListGoods({ goods }: OfferWithDetailsProps): JSX.Element {
       <h2 className="offer__inside-title">What&apos;s inside</h2>
       <ul className="offer__inside-list">
         {
-          goods.map((good) => (<li className="offer__inside-item">{good}</li>))
+          goods.map((good) => (<li className="offer__inside-item" key={good}>{good}</li>))
         }
       </ul>
     </div>
-  )
+  );
 }
 
 function ListFeatures(offer: OfferWithDetailsProps): JSX.Element {
   return (
     <ul className="offer__features">
       {
-        offer.type &&  <li className="offer__feature offer__feature--entire">{offer.type}</li>
+        offer.type && <li className="offer__feature offer__feature--entire">{offer.type}</li>
       }
       {
         offer.maxAdults > 0 && <li className="offer__feature offer__feature--adults">Max {offer.maxAdults} adults</li>
@@ -136,8 +136,23 @@ function ListFeatures(offer: OfferWithDetailsProps): JSX.Element {
       {
         offer.bedrooms > 0 && <li className="offer__feature offer__feature--bedrooms">{offer.bedrooms} Bedrooms</li>
       }
-  </ul>
-  )
+    </ul>
+  );
+}
+
+function ListOfferPhotos({ images }: OfferWithDetailsProps): JSX.Element {
+  return (
+    <div className="offer__gallery-container container">
+      <div className="offer__gallery">
+        {
+          images.map((image) => (
+            <div className="offer__image-wrapper" key={image}>
+              <img className="offer__image" src={image} alt="Photo studio" />
+            </div>))
+        }
+      </div>
+    </div>
+  );
 }
 
 export default function OfferDetailed(): JSX.Element {
@@ -183,28 +198,7 @@ export default function OfferDetailed(): JSX.Element {
 
       <main className="page__main page__main--offer">
         <section className="offer">
-          <div className="offer__gallery-container container">
-            <div className="offer__gallery">
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/room.jpg" alt="Photo studio" />
-              </div>
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/apartment-01.jpg" alt="Photo studio" />
-              </div>
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/apartment-02.jpg" alt="Photo studio" />
-              </div>
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/apartment-03.jpg" alt="Photo studio" />
-              </div>
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/studio-01.jpg" alt="Photo studio" />
-              </div>
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/apartment-01.jpg" alt="Photo studio" />
-              </div>
-            </div>
-          </div>
+          <ListOfferPhotos {...offer} />
           <div className="offer__container container">
             <div className="offer__wrapper">
               <Premium {...offer} />
@@ -221,19 +215,19 @@ export default function OfferDetailed(): JSX.Element {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: offer.rating * 20 + '%' }}></span>
+                  <span style={{ width: `${offer.rating * 20 }%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{offer.rating}</span>
               </div>
-              <ListFeatures {...offer}/>
+              <ListFeatures {...offer} />
               <div className="offer__price">
                 <b className="offer__price-value">&euro;{offer.price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               <ListGoods {...offer} />
               <Host {...offer} />
-              <Reviews {...offer} />
+              <Reviews />
             </div>
           </div>
           <section className="offer__map map"></section>

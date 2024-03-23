@@ -118,22 +118,27 @@ export const OfferWithDetailsMock : OfferWithDetailsProps = {
   isPremium: true,
   rating: 4,
   previewImage: 'img/apartment-01.jpg',
-  description: "A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.",
+  description: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
   bedrooms: 3,
   goods: [
-    "Heating",
-    "Wi-Fi",
-    "Washing machine",
-    "Towels",
-    "Coffee machine"
+    'Heating',
+    'Wi-Fi',
+    'Washing machine',
+    'Towels',
+    'Coffee machine'
   ],
   host: {
-    name: "Oliver Conner",
-    avatarUrl: "img/avatar-angelina.jpg",
+    name: 'Oliver Conner',
+    avatarUrl: 'img/avatar-angelina.jpg',
     isPro: false
   },
   images: [
-    "https://url-to-image/image.png"
+    'img/apartment-02.jpg',
+    'img/apartment-01.jpg',
+    'img/apartment-03.jpg',
+    'img/studio-01.jpg',
+    'img/apartment-01.jpg',
+    'img/apartment-03.jpg'
   ],
   maxAdults: 4
 };
