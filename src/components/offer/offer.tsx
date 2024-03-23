@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-
+import { MapProps } from '../../mocks/location';
 
 function Premium({ isPremium }: OfferProps): false | JSX.Element {
   return (
@@ -9,6 +9,37 @@ function Premium({ isPremium }: OfferProps): false | JSX.Element {
       </div>
     )
   );
+}
+
+export function OfferInfo({ offer, offerLink }: {offer: OfferProps, offerLink: string}): JSX.Element {
+  return (
+    <div className="place-card__info">
+      <div className="place-card__price-wrapper">
+        <div className="place-card__price">
+          <b className="place-card__price-value">&euro;{offer.price}</b>
+          <span className="place-card__price-text">&#47;&nbsp;night</span>
+        </div>
+        <button className="place-card__bookmark-button button" type="button">
+          <svg className="place-card__bookmark-icon" width="18" height="19">
+            <use xlinkHref="#icon-bookmark"></use>
+          </svg>
+          <span className="visually-hidden">{offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
+        </button>
+      </div>
+      <div className="place-card__rating rating">
+        <div className="place-card__stars rating__stars">
+          <span style={{ width: offer.rating * 20 }}></span>
+          <span className="visually-hidden">Rating</span>
+        </div>
+      </div>
+      <h2 className="place-card__name">
+        <Link to={offerLink}>
+          {offer.title}
+        </Link>
+      </h2>
+      <p className="place-card__type">{offer.type}</p>
+    </div>
+  )
 }
 
 function Offer({ offer, setState }: { offer: OfferProps; setState: () => void }): JSX.Element {
@@ -21,32 +52,7 @@ function Offer({ offer, setState }: { offer: OfferProps; setState: () => void })
           <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt="Place image" />
         </Link>
       </div>
-      <div className="place-card__info">
-        <div className="place-card__price-wrapper">
-          <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{offer.price}</b>
-            <span className="place-card__price-text">&#47;&nbsp;night</span>
-          </div>
-          <button className="place-card__bookmark-button button" type="button">
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">{offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
-          </button>
-        </div>
-        <div className="place-card__rating rating">
-          <div className="place-card__stars rating__stars">
-            <span style={{ width: offer.rating * 20 }}></span>
-            <span className="visually-hidden">Rating</span>
-          </div>
-        </div>
-        <h2 className="place-card__name">
-          <Link to={offerLink}>
-            {offer.title}
-          </Link>
-        </h2>
-        <p className="place-card__type">{offer.type}</p>
-      </div>
+      <OfferInfo offer={offer} offerLink={offerLink} />
     </article>
   );
 }
@@ -101,21 +107,26 @@ export type OfferProps = {
   price: number;
   city: {
     name: string;
-    location: {
-      latitude: number;
-      longitude: number;
-      zoom: number;
-    };
+    location: MapProps;
   };
-  location: {
-    latitude: number;
-    longitude: number;
-    zoom: number;
-  };
+  location: MapProps;
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;
   previewImage: string;
 }
+
+export type OfferWithDetailsProps = OfferProps & {
+  description: string,
+  bedrooms: number,
+  goods: string[],
+  host: {
+    name: string,
+    avatarUrl: string,
+    isPro: boolean
+  },
+  images: string[],
+  maxAdults: number
+};
 
 export default Offer;
