@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Offer from '../../components/offer/offer';
-import { OfferProps } from '../../components/offer/offer';
-import Map, { Point } from '../../components/location/map';
-import { City } from '../../components/location/map';
+import Map from '../../components/location/map';
+import { OfferProps } from '../../types/offer';
+import { City, Point } from '../../types/location';
 
 function ListLocations({ locations }: { locations: City[] }): JSX.Element {
   return (

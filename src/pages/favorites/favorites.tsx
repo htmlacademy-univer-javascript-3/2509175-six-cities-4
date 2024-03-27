@@ -1,4 +1,4 @@
-import { OfferProps } from '../../components/offer/offer';
+import { OfferProps } from '../../types/offer';
 import { FavoriteOffer } from '../../components/offer/offer';
 
 

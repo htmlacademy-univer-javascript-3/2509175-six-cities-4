@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { OfferProps } from '../../types/offer';
 
 function Premium({ isPremium }: OfferProps): false | JSX.Element {
   return (
@@ -41,7 +42,7 @@ export function OfferInfo({ offer, offerLink }: { offer: OfferProps; offerLink: 
   );
 }
 
-function Offer({ offer, setState }: { offer: OfferProps; setState: () => void }): JSX.Element {
+export default function Offer({ offer, setState }: { offer: OfferProps; setState: () => void }): JSX.Element {
   const offerLink = `/offer/${offer.id}`;
   return (
     <article className="cities__card place-card" onMouseOver={setState}>
@@ -98,40 +99,3 @@ export function FavoriteOffer({ offer }: { offer: OfferProps }): JSX.Element {
     </article>
   );
 }
-
-type OfferLocation = {
-  latitude: number;
-  longitude: number;
-  zoom: number;
-}
-
-export type OfferProps = {
-  id: string;
-  title: string;
-  type: string;
-  price: number;
-  city: {
-    name: string;
-    location: OfferLocation;
-  };
-  location: OfferLocation;
-  isFavorite: boolean;
-  isPremium: boolean;
-  rating: number;
-  previewImage: string;
-}
-
-export type OfferWithDetailsProps = OfferProps & {
-  description: string;
-  bedrooms: number;
-  goods: string[];
-  host: {
-    name: string;
-    avatarUrl: string;
-    isPro: boolean;
-  };
-  images: string[];
-  maxAdults: number;
-};
-
-export default Offer;

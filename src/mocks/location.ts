@@ -1,4 +1,4 @@
-import { City } from '../components/location/map';
+import { City } from '../types/location';
 
 export const DefaultLocations: City[] = [
   { title: 'Paris', zoom: 7, latitude: 52.3909553943508, longitude: 4.85309666406198},

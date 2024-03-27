@@ -1,29 +1,35 @@
 import { useRef, useEffect } from 'react';
 import { Icon, Marker, layerGroup } from 'leaflet';
-import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
+import { City, Point } from '../../types/location';
 import useMap from '../../hooks/use-map';
 import 'leaflet/dist/leaflet.css';
 
 
 const defaultCustomIcon = new Icon({
-  iconUrl: URL_MARKER_DEFAULT,
+  iconUrl:  'img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40]
 });
 
 const currentCustomIcon = new Icon({
-  iconUrl: URL_MARKER_CURRENT,
+  iconUrl: 'img/pin-active.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40]
 });
 
-export default function Map(props: { city: City; points: Point[]; selectedPoint: Point | undefined }): JSX.Element {
+type MapProps = {
+  city: City;
+  points: Point[];
+  selectedPoint?: Point;
+}
+
+export default function Map({city, points, selectedPoint}: MapProps): JSX.Element {
   const mapRef = useRef(null);
-  const map = useMap(mapRef, props.city);
+  const map = useMap(mapRef, city);
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map);
-      props.points.forEach((point) => {
+      points.forEach((point) => {
         const marker = new Marker({
           lat: point.latitude,
           lng: point.longitude
@@ -31,7 +37,7 @@ export default function Map(props: { city: City; points: Point[]; selectedPoint:
 
         marker
           .setIcon(
-            props.selectedPoint !== undefined && point.title === props.selectedPoint.title
+            point.title === selectedPoint?.title
               ? currentCustomIcon
               : defaultCustomIcon
           )
@@ -42,17 +48,7 @@ export default function Map(props: { city: City; points: Point[]; selectedPoint:
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, props.points, props.selectedPoint]);
+  }, [map, points, selectedPoint]);
 
-  return <div style={{height: '90%', width: '100%', margin: '40px'}} ref={mapRef}></div>;
+  return <section className="cities__map map" ref={mapRef}></section>;
 }
-
-export type City = Point & {
-    zoom: number;
-};
-
-export type Point = {
-    title: string;
-    latitude: number;
-    longitude: number;
-};

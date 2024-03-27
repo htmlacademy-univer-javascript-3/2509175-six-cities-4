@@ -1,7 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import ReviewForm from '../../components/review-form/review-form';
 import { OfferWithDetailsMock } from '../../mocks/offer';
-import { OfferProps, OfferWithDetailsProps, OfferInfo } from '../../components/offer/offer';
+import { OfferInfo } from '../../components/offer/offer';
+import { OfferProps, OfferWithDetailsProps } from '../../types/offer';
 
 function Premium({ isPremium }: OfferWithDetailsProps): false | JSX.Element {
   return (
@@ -96,7 +97,7 @@ function NearPlace(offer: OfferProps): JSX.Element {
 }
 
 function ListNearPlaces(): JSX.Element {
-  const nearPlacesMock: OfferProps[] = [OfferWithDetailsMock, OfferWithDetailsMock, OfferWithDetailsMock];
+  const nearPlacesMock: OfferProps[] = [OfferWithDetailsMock, OfferWithDetailsMock, OfferWithDetailsMock] as OfferProps[];
   return (
     <div className="container">
       <section className="near-places places">
@@ -157,7 +158,7 @@ function ListOfferPhotos({ images }: OfferWithDetailsProps): JSX.Element {
 
 export default function OfferDetailed(): JSX.Element {
   const { id } = useParams();
-  const offer: OfferWithDetailsProps = OfferWithDetailsMock; // todo get 'offer' from server
+  const offer: OfferWithDetailsProps = OfferWithDetailsMock as OfferWithDetailsProps; // todo get 'offer' from server
   return (
     <div className="page" key={id}>
       <header className="header">
