@@ -5,7 +5,7 @@ export default function ReviewForm(): JSX.Element {
   const [review, setReview] = useState({ rating: 0, text: '' });
   const onRatingChange = (e: ChangeEvent<HTMLInputElement>) => setReview({...review, rating: Number(e.target.value)});
   const onTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => setReview({...review, text: e.target.value});
-  console.log(review);
+  // console.log(review);
   return (
     <form className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
