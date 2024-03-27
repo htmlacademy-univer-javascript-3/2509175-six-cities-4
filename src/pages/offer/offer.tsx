@@ -158,7 +158,7 @@ function ListOfferPhotos({ images }: OfferWithDetailsProps): JSX.Element {
 
 export default function OfferDetailed(): JSX.Element {
   const { id } = useParams();
-  const offer: OfferWithDetailsProps = OfferWithDetailsMock as OfferWithDetailsProps; // todo get 'offer' from server
+  const offer: OfferWithDetailsProps = OfferWithDetailsMock ; // todo get 'offer' from server
   return (
     <div className="page" key={id}>
       <header className="header">

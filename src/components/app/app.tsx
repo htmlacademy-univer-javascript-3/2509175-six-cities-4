@@ -8,8 +8,8 @@ import NotFound from '../errors/404';
 import { PrivateRoute } from '../private-route/private-route';
 import { UserAuthState } from '../private-route/userAuthState';
 
-import { OfferProps } from '../../components/offer/offer';
-import { City } from '../location/map';
+import { OfferProps } from '../../types/offer';
+import { City } from '../../types/location';
 
 export default function App(props: { offers: OfferProps[]; locations: City[] }): JSX.Element {
   return (

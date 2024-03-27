@@ -1,5 +1,4 @@
-import { OfferProps, OfferWithDetailsProps } from '../components/offer/offer';
-
+import { OfferProps, OfferWithDetailsProps } from '../types/offer';
 
 export const DefaultOffers: OfferProps[] = [
   {
