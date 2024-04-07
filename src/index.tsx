@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from '../src/components/app/app';
-import { DefaultOffers } from './mocks/offer';
 import { DefaultLocations } from './mocks/location';
 
 const root = ReactDOM.createRoot(
@@ -10,7 +9,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App offers={DefaultOffers} locations={DefaultLocations}/>
+    <App locations={DefaultLocations}/>
   </React.StrictMode>
 );
 
