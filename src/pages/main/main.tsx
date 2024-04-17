@@ -6,6 +6,7 @@ import { filterOffers, pickCity } from '../../store/action';
 import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
 import { OfferProps } from '../../types/offer';
 import { City, Point } from '../../types/location';
+import { DefaultOffers } from '../../mocks/offer';
 
 type LocationItemProps = {
   title: string;
@@ -43,7 +44,7 @@ function ListLocations({ locations }: { locations: City[] }): JSX.Element {
               isActive={city.title === currentLocation.title}
               onClick={(cityName: string) => {
                 dispatch(pickCity(locations.find((c) => c.title === cityName)!));
-                dispatch(filterOffers());
+                dispatch(filterOffers(DefaultOffers.filter((offer) => offer.city.name === city.title)));
               }}
             />
           ))}

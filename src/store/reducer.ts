@@ -15,7 +15,7 @@ type initialStateType = {
 
 const initialState: initialStateType = {
   city: INIT_LOCATION,
-  offers: DefaultOffers.filter((offer) => offer.city.name === INIT_LOCATION.title),
+  offers: DefaultOffers
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -23,8 +23,8 @@ export const reducer = createReducer(initialState, (builder) => {
     .addCase(pickCity, (state, action) => {
       state.city = action.payload;
     })
-    .addCase(filterOffers, (state) => {
-      state.offers = DefaultOffers.filter((offer) => offer.city.name === state.city.title);
+    .addCase(filterOffers, (state, action) => {
+      state.offers = action.payload;
     });
 });
 
