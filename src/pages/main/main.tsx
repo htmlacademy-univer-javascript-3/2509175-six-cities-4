@@ -7,12 +7,24 @@ import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
 import { OfferProps } from '../../types/offer';
 import { City, Point } from '../../types/location';
 import { DefaultOffers } from '../../mocks/offer';
+import { Dictionary } from '@reduxjs/toolkit';
 
 type LocationItemProps = {
   title: string;
   isActive: boolean;
   onClick: (city: string) => void;
 };
+
+function GetOffersByCity(offers: OfferProps[]): Dictionary<OfferProps[]>{
+  const offersByCity : Dictionary<OfferProps[]> = {};
+  offers.forEach((offer) => {
+    if (!(offer.city.name in offersByCity)) {
+      offersByCity[offer.city.name] = [];
+    }
+    offersByCity[offer.city.name]?.push(offer);
+  });
+  return offersByCity;
+}
 
 function LocationItem(props: LocationItemProps) : JSX.Element {
   const { title, isActive, onClick } = props;
@@ -32,6 +44,7 @@ function LocationItem(props: LocationItemProps) : JSX.Element {
 
 function ListLocations({ locations }: { locations: City[] }): JSX.Element {
   const currentLocation : City = useAppSelector((state) => state.city);
+  const offersByCity : Dictionary<OfferProps[]> = GetOffersByCity(DefaultOffers);
   const dispatch = useAppDispatch();
   return (
     <div className="tabs">
@@ -44,7 +57,7 @@ function ListLocations({ locations }: { locations: City[] }): JSX.Element {
               isActive={city.title === currentLocation.title}
               onClick={(cityName: string) => {
                 dispatch(pickCity(locations.find((c) => c.title === cityName)!));
-                dispatch(filterOffers(DefaultOffers.filter((offer) => offer.city.name === city.title)));
+                dispatch(filterOffers(offersByCity[cityName]));
               }}
             />
           ))}

@@ -24,7 +24,7 @@ export const reducer = createReducer(initialState, (builder) => {
       state.city = action.payload;
     })
     .addCase(filterOffers, (state, action) => {
-      state.offers = action.payload;
+      state.offers = action.payload ?? [];
     });
 });
 
