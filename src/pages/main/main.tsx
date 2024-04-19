@@ -1,24 +1,66 @@
 import { useState } from 'react';
+import cn from 'classnames';
 import Offer from '../../components/offer/offer';
 import Map from '../../components/location/map';
+import { filterOffers, pickCity } from '../../store/action';
+import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
 import { OfferProps } from '../../types/offer';
 import { City, Point } from '../../types/location';
+import { DefaultOffers } from '../../mocks/offer';
+import { Dictionary } from '@reduxjs/toolkit';
+
+type LocationItemProps = {
+  title: string;
+  isActive: boolean;
+  onClick: (city: string) => void;
+};
+
+function GetOffersByCity(offers: OfferProps[]): Dictionary<OfferProps[]>{
+  const offersByCity : Dictionary<OfferProps[]> = {};
+  offers.forEach((offer) => {
+    if (!(offer.city.name in offersByCity)) {
+      offersByCity[offer.city.name] = [];
+    }
+    offersByCity[offer.city.name]?.push(offer);
+  });
+  return offersByCity;
+}
+
+function LocationItem(props: LocationItemProps) : JSX.Element {
+  const { title, isActive, onClick } = props;
+  const onClickCallback = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    onClick(title);
+  };
+
+  return (
+    <li className="locations__item">
+      <a className={cn('locations__item-link', 'tabs__item', isActive && 'tabs__item--active')} onClick={onClickCallback}>
+        <span>{title}</span>
+      </a>
+    </li>
+  );
+}
 
 function ListLocations({ locations }: { locations: City[] }): JSX.Element {
+  const currentLocation : City = useAppSelector((state) => state.city);
+  const offersByCity : Dictionary<OfferProps[]> = GetOffersByCity(DefaultOffers);
+  const dispatch = useAppDispatch();
   return (
     <div className="tabs">
       <section className="locations container">
         <ul className="locations__list tabs__list">
-          {
-            locations.map((location) =>
-              (
-                <li className="locations__item" key={location.title}>
-                  <a className="locations__item-link tabs__item" href="#">
-                    <span>{location.title}</span>
-                  </a>
-                </li>)
-            )
-          }
+          {locations.map((city) => (
+            <LocationItem
+              key={`${city.title}`}
+              title={city.title}
+              isActive={city.title === currentLocation.title}
+              onClick={(cityName: string) => {
+                dispatch(pickCity(locations.find((c) => c.title === cityName)!));
+                dispatch(filterOffers(offersByCity[cityName]));
+              }}
+            />
+          ))}
         </ul>
       </section>
     </div>
@@ -47,8 +89,9 @@ function GetPointFromOffer(offer: OfferProps): Point {
   );
 }
 
-export default function MainScreen({ offers, locations }: { offers: OfferProps[]; locations: City[] }): JSX.Element {
-  const currentLocation = locations[3];
+export default function MainScreen({ locations }: { locations: City[] }): JSX.Element {
+  const currentLocation : City = useAppSelector((state) => state.city);
+  const offers = useAppSelector((state) => state.offers);
   const [activeOffer, setActiveOffer] = useState(offers[0]);
   return (
     <main className="page__main page__main--index">
@@ -58,7 +101,7 @@ export default function MainScreen({ offers, locations }: { offers: OfferProps[]
         <div className="cities__places-container container">
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">312 places to stay in Amsterdam</b>
+            <b className="places__found">{offers.length} places to stay in {currentLocation.title}</b>
             <form className="places__sorting" action="#" method="get">
               <span className="places__sorting-caption">Sort by</span>
               <span className="places__sorting-type" tabIndex={0}>
