@@ -3,19 +3,22 @@ import { DefaultLocations } from '../mocks/location';
 import { DefaultOffers } from '../mocks/offer';
 import { OfferProps } from '../types/offer';
 import { City } from '../types/location';
-import { filterOffers, pickCity } from './action';
+import { filterOffers, pickCity, chooseSortStrategy } from './action';
 import { store } from '../store/index';
+import { SortStrategy } from '../components/offers-sort/sort-strategy';
 
 const INIT_LOCATION = DefaultLocations[3];
 
 type initialStateType = {
     city: City;
     offers: OfferProps[];
+    sortStrategy: SortStrategy;
 }
 
 const initialState: initialStateType = {
   city: INIT_LOCATION,
-  offers: DefaultOffers
+  offers: DefaultOffers,
+  sortStrategy: SortStrategy.Popular
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -25,6 +28,9 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(filterOffers, (state, action) => {
       state.offers = action.payload ?? [];
+    })
+    .addCase(chooseSortStrategy, (state, action) => {
+      state.sortStrategy = action.payload;
     });
 });
 
