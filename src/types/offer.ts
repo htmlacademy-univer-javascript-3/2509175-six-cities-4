@@ -24,11 +24,21 @@ export type OfferWithDetailsProps = OfferProps & {
     description: string;
     bedrooms: number;
     goods: string[];
-    host: {
-        name: string;
-        avatarUrl: string;
-        isPro: boolean;
-    };
+    host: User;
     images: string[];
     maxAdults: number;
 };
+
+export type OfferReview = {
+    id: string;
+    date: string;
+    user: User;
+    comment: string;
+    rating: number;
+}
+
+export type User = {
+    name: string;
+    avatarUrl: string;
+    isPro: boolean;
+}
