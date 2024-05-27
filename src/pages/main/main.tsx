@@ -122,7 +122,7 @@ export default function MainScreen({ locations }: { locations: City[] }): JSX.El
             <ListOffers offers={offers} setActiveOffer={setActiveOffer} />
           </section>
           <div className="cities__right-section">
-            <Map selectedPoint={GetPointFromOffer(activeOffer)} city={currentLocation} points={offers.map((offer) => GetPointFromOffer(offer)).filter((offer) => offer !== undefined)} />
+            <Map selectedPoint={GetPointFromOffer(activeOffer)} city={currentLocation} points={offers.map((offer) => GetPointFromOffer(offer)).filter((p) => !!p).map((p) => p as Point)} />
           </div>
         </div>
       </div>
