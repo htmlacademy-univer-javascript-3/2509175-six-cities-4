@@ -1,8 +1,13 @@
 import { useParams, Link } from 'react-router-dom';
 import ReviewForm from '../../components/review-form/review-form';
-import { OfferWithDetailsMock } from '../../mocks/offer';
 import { OfferInfo } from '../../components/offer/offer';
-import { OfferProps, OfferWithDetailsProps } from '../../types/offer';
+import { OfferProps, OfferReview, OfferWithDetailsProps } from '../../types/offer';
+import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
+import { fetchOfferById, fetchOfferReviews, fetchOffersNearby } from '../../store/action';
+import { useEffect } from 'react';
+import NotFound from '../../components/errors/404';
+import LoadingSpinner from '../loading/spinner';
+import { UserAuthState } from '../../components/private-route/userAuthState';
 
 function Premium({ isPremium }: OfferWithDetailsProps): false | JSX.Element {
   return (
@@ -49,35 +54,42 @@ function Host(offer: OfferWithDetailsProps): JSX.Element {
   );
 }
 
-function Reviews(): JSX.Element {
+function Review({review}: {review: OfferReview}): JSX.Element {
+  return (
+    <li className="reviews__item">
+      <div className="reviews__user user">
+        <div className="reviews__avatar-wrapper user__avatar-wrapper">
+          <img className="reviews__avatar user__avatar" src={review.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
+        </div>
+        <span className="reviews__user-name">
+          {review.user.name}
+        </span>
+      </div>
+      <div className="reviews__info">
+        <div className="reviews__rating rating">
+          <div className="reviews__stars rating__stars">
+            <span style={{ width: review.rating * 20 }}></span>
+            <span className="visually-hidden">Rating</span>
+          </div>
+        </div>
+        <p className="reviews__text">
+          {review.comment}
+        </p>
+        <time className="reviews__time" dateTime={review.date}>{new Date(review.date).toDateString()}</time>
+      </div>
+    </li>
+  );
+}
+
+function Reviews({reviews, id} : {reviews: OfferReview[]; id: string}): JSX.Element {
+  const isUserAuth = useAppSelector((state) => state.userAuthState) === UserAuthState.Auth;
   return (
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">1</span></h2>
       <ul className="reviews__list">
-        <li className="reviews__item">
-          <div className="reviews__user user">
-            <div className="reviews__avatar-wrapper user__avatar-wrapper">
-              <img className="reviews__avatar user__avatar" src="img/avatar-max.jpg" width="54" height="54" alt="Reviews avatar" />
-            </div>
-            <span className="reviews__user-name">
-              Max
-            </span>
-          </div>
-          <div className="reviews__info">
-            <div className="reviews__rating rating">
-              <div className="reviews__stars rating__stars">
-                <span style={{ width: '80%' }}></span>
-                <span className="visually-hidden">Rating</span>
-              </div>
-            </div>
-            <p className="reviews__text">
-              A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.
-            </p>
-            <time className="reviews__time" dateTime="2019-04-24">April 2019</time>
-          </div>
-        </li>
+        {reviews.map((review) => <Review review={review} key={id}/>)}
       </ul>
-      <ReviewForm />
+      {isUserAuth && <ReviewForm id={id} />}
     </section>
   );
 }
@@ -96,15 +108,14 @@ function NearPlace(offer: OfferProps): JSX.Element {
   );
 }
 
-function ListNearPlaces(): JSX.Element {
-  const nearPlacesMock: OfferProps[] = [OfferWithDetailsMock, OfferWithDetailsMock, OfferWithDetailsMock] as OfferProps[];
+function ListNearPlaces({offers} : {offers: OfferProps[]}): JSX.Element {
   return (
     <div className="container">
       <section className="near-places places">
         <h2 className="near-places__title">Other places in the neighbourhood</h2>
         <div className="near-places__list places__list">
           {
-            nearPlacesMock.map((place) => (<NearPlace {...place} key={place.id}/>))
+            offers.map((place) => (<NearPlace {...place} key={place.id}/>))
           }
         </div>
       </section>
@@ -158,7 +169,27 @@ function ListOfferPhotos({ images }: OfferWithDetailsProps): JSX.Element {
 
 export default function OfferDetailed(): JSX.Element {
   const { id } = useParams();
-  const offer: OfferWithDetailsProps = OfferWithDetailsMock ; // todo get 'offer' from server
+  const dispatch = useAppDispatch();
+
+  const isLoading = useAppSelector((state) => state.isLoading);
+  const offer = useAppSelector((state) => state.currentOffer);
+  const offersNearby = useAppSelector((state) => state.offersNearby);
+  const offerReviews = useAppSelector((state) => state.offerReviews);
+
+  useEffect(() => {
+    dispatch(fetchOfferById(id ?? ''));
+    dispatch(fetchOffersNearby(id ?? ''));
+    dispatch(fetchOfferReviews(id ?? ''));
+  }, [dispatch, id]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if(!offer) {
+    return <NotFound/>;
+  }
+
   return (
     <div className="page" key={id}>
       <header className="header">
@@ -228,12 +259,12 @@ export default function OfferDetailed(): JSX.Element {
               </div>
               <ListGoods {...offer} />
               <Host {...offer} />
-              <Reviews />
+              <Reviews reviews={offerReviews ?? []} id={id ?? ''} />
             </div>
           </div>
           <section className="offer__map map"></section>
         </section>
-        <ListNearPlaces />
+        <ListNearPlaces offers={offersNearby ?? []}/>
       </main>
     </div >
   );

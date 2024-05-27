@@ -1,15 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import cn from 'classnames';
 import Offer from '../../components/offer/offer';
 import Map from '../../components/location/map';
-import { filterOffers, pickCity } from '../../store/action';
+import { fetchOffers, pickCity } from '../../store/action';
 import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
 import { OfferProps } from '../../types/offer';
 import { City, Point } from '../../types/location';
-import { DefaultOffers } from '../../mocks/offer';
-import { Dictionary } from '@reduxjs/toolkit';
 import OffersSort from '../../components/offers-sort/offers-sort';
 import { SortStrategy } from '../../components/offers-sort/sort-strategy';
+import LoadingSpinner from '../loading/spinner';
 
 type LocationItemProps = {
   title: string;
@@ -17,18 +16,8 @@ type LocationItemProps = {
   onClick: (city: string) => void;
 };
 
-function GetOffersByCity(offers: OfferProps[]): Dictionary<OfferProps[]>{
-  const offersByCity : Dictionary<OfferProps[]> = {};
-  offers.forEach((offer) => {
-    if (!(offer.city.name in offersByCity)) {
-      offersByCity[offer.city.name] = [];
-    }
-    offersByCity[offer.city.name]?.push(offer);
-  });
-  return offersByCity;
-}
 
-function LocationItem(props: LocationItemProps) : JSX.Element {
+function LocationItem(props: LocationItemProps): JSX.Element {
   const { title, isActive, onClick } = props;
   const onClickCallback = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -45,8 +34,7 @@ function LocationItem(props: LocationItemProps) : JSX.Element {
 }
 
 function ListLocations({ locations }: { locations: City[] }): JSX.Element {
-  const currentLocation : City = useAppSelector((state) => state.city);
-  const offersByCity : Dictionary<OfferProps[]> = GetOffersByCity(DefaultOffers);
+  const currentLocation: City = useAppSelector((state) => state.city);
   const dispatch = useAppDispatch();
   return (
     <div className="tabs">
@@ -59,7 +47,6 @@ function ListLocations({ locations }: { locations: City[] }): JSX.Element {
               isActive={city.title === currentLocation.title}
               onClick={(cityName: string) => {
                 dispatch(pickCity(locations.find((c) => c.title === cityName)!));
-                dispatch(filterOffers(offersByCity[cityName]));
               }}
             />
           ))}
@@ -70,7 +57,7 @@ function ListLocations({ locations }: { locations: City[] }): JSX.Element {
 }
 
 function ListOffers({ offers, setActiveOffer }: { offers: OfferProps[]; setActiveOffer: (arg0: OfferProps) => void }): JSX.Element {
-  const selectedSortStrategy : SortStrategy = useAppSelector((state) => state.sortStrategy);
+  const selectedSortStrategy: SortStrategy = useAppSelector((state) => state.sortStrategy);
   const offersSorted = [...offers];
 
   switch (selectedSortStrategy) {
@@ -95,8 +82,8 @@ function ListOffers({ offers, setActiveOffer }: { offers: OfferProps[]; setActiv
   );
 }
 
-function GetPointFromOffer(offer: OfferProps): Point {
-  return (
+function GetPointFromOffer(offer: OfferProps | undefined): Point | undefined {
+  return offer && (
     {
       latitude: offer.location.latitude,
       longitude: offer.location.longitude,
@@ -106,9 +93,22 @@ function GetPointFromOffer(offer: OfferProps): Point {
 }
 
 export default function MainScreen({ locations }: { locations: City[] }): JSX.Element {
-  const currentLocation : City = useAppSelector((state) => state.city);
-  const offers = useAppSelector((state) => state.offers);
-  const [activeOffer, setActiveOffer] = useState(offers[0]);
+  const dispatch = useAppDispatch();
+
+  const isLoading = useAppSelector((state) => state.isLoading);
+  const currentLocation = useAppSelector((state) => state.city);
+  const offers = useAppSelector((state) => state.offers.filter((offer) => offer.city.name === currentLocation.title));
+
+  const [activeOffer, setActiveOffer] = useState<OfferProps | undefined>(undefined);
+
+  useEffect(() => {
+    dispatch(fetchOffers());
+  }, [dispatch, currentLocation]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <main className="page__main page__main--index">
       <h1 className="visually-hidden">Cities</h1>
@@ -122,7 +122,7 @@ export default function MainScreen({ locations }: { locations: City[] }): JSX.El
             <ListOffers offers={offers} setActiveOffer={setActiveOffer} />
           </section>
           <div className="cities__right-section">
-            <Map selectedPoint={GetPointFromOffer(activeOffer)} city={currentLocation} points={offers.map((offer) => GetPointFromOffer(offer))}/>
+            <Map selectedPoint={GetPointFromOffer(activeOffer)} city={currentLocation} points={offers.map((offer) => GetPointFromOffer(offer)).filter((p) => !!p).map((p) => p as Point)} />
           </div>
         </div>
       </div>

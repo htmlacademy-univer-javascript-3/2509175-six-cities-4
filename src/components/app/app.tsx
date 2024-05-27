@@ -10,7 +10,6 @@ import { UserAuthState } from '../private-route/userAuthState';
 import { Provider } from 'react-redux';
 import { City } from '../../types/location';
 import { store } from '../../store';
-import { DefaultOffers } from '../../mocks/offer';
 
 export default function App(props: { locations: City[] }): JSX.Element {
   return (
@@ -19,7 +18,7 @@ export default function App(props: { locations: City[] }): JSX.Element {
         <Routes>
           <Route path='/' element={<MainScreen {...props} />} />
           <Route path='/login' element={<Login />} />
-          <Route path='/favorites' element={<PrivateRoute userAuthState={UserAuthState.Auth}><Favorites favoriteOffers={DefaultOffers}/></PrivateRoute>} />
+          <Route path='/favorites' element={<PrivateRoute userAuthState={UserAuthState.Auth}><Favorites favoriteOffers={[]} /></PrivateRoute>} />
           <Route path='/offer/:id' element={<Offer />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
