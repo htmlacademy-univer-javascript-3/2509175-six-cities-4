@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { DefaultLocations } from '../mocks/location';
+import { Locations } from '../data/location';
 import { OfferProps, OfferReview, OfferWithDetailsProps } from '../types/offer';
 import { City } from '../types/location';
 import { setOffers, pickCity, chooseSortStrategy, fetchOffers, setCurrentOffer, fetchOfferById, setOffersNearby, fetchOffersNearby, setOfferReviews, fetchOfferReviews, auth, checkAuth, setAuthState, setUserInfo, fetchFavoriteOffers, setFavoriteOffers } from './action';
@@ -23,7 +23,7 @@ type initialStateType = {
 }
 
 const initialState: initialStateType = {
-  city: DefaultLocations[3],
+  city: Locations[3],
   offers: [],
   sortStrategy: SortStrategy.Popular,
   isLoading: false,

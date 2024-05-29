@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from '../src/components/app/app';
-import { DefaultLocations } from './mocks/location';
+import { Locations } from './data/location';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App locations={DefaultLocations}/>
+    <App locations={Locations}/>
   </React.StrictMode>
 );
 
