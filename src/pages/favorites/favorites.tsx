@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
 import { useEffect } from 'react';
 import { fetchFavoriteOffers } from '../../store/action';
 import Header from '../../components/header/header';
-import { DefaultLocations } from '../../mocks/location';
+import { Locations } from '../../data/location';
 
 
 function ListCityFavoriteOffers({ offers }: { offers: OfferProps[] }): JSX.Element {
@@ -38,7 +38,7 @@ function ListFavoriteOffers({ offers }: {offers: OfferProps[]}): JSX.Element {
   return (
     <ul className="favorites__list">
       {
-        DefaultLocations.map((location) => offersByCity[location.title] && (
+        Locations.map((location) => offersByCity[location.title] && (
           <ListCityFavoriteOffers offers={offersByCity[location.title]} key={location.title}/>
         ))
       }
