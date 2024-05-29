@@ -59,7 +59,7 @@ export default function ReviewForm({ id }: { id: string }): JSX.Element {
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled={review.rating === 0 || review.text.length === 0} onClick={submitReview}>Submit</button>
+        <button className="reviews__submit form__submit button" type="submit" disabled={review.rating < 1 || review.text.length < 50} onClick={submitReview}>Submit</button>
       </div>
     </form>
   );

@@ -3,11 +3,12 @@ import ReviewForm from '../../components/review-form/review-form';
 import { OfferInfo } from '../../components/offer/offer';
 import { OfferProps, OfferReview, OfferWithDetailsProps } from '../../types/offer';
 import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
-import { fetchOfferById, fetchOfferReviews, fetchOffersNearby } from '../../store/action';
+import { addFavoriteOffer, fetchOfferById, fetchOfferReviews, fetchOffersNearby } from '../../store/action';
 import { useEffect } from 'react';
 import NotFound from '../../components/errors/404';
 import LoadingSpinner from '../loading/spinner';
 import { UserAuthState } from '../../components/private-route/userAuthState';
+import Header from '../../components/header/header';
 
 function Premium({ isPremium }: OfferWithDetailsProps): false | JSX.Element {
   return (
@@ -26,6 +27,17 @@ function Pro({ host }: OfferWithDetailsProps): false | JSX.Element {
         Pro
       </span>
     )
+  );
+}
+
+function BookmarkButton({ isFavorite, onClick }: { isFavorite: boolean; onClick: () => void }) {
+  const className = isFavorite ? 'offer__bookmark-button offer__bookmark-button--active button' : 'offer__bookmark-button button';
+  return (
+    <button className={className} type="button" onClick={onClick}>
+      <svg className="offer__bookmark-icon" width="31" height="33">
+        <use xlinkHref="#icon-bookmark"></use>
+      </svg>
+    </button>
   );
 }
 
@@ -87,7 +99,7 @@ function Reviews({reviews, id} : {reviews: OfferReview[]; id: string}): JSX.Elem
     <section className="offer__reviews reviews">
       <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">1</span></h2>
       <ul className="reviews__list">
-        {reviews.map((review) => <Review review={review} key={id}/>)}
+        {reviews.map((review) => <Review review={review} key={review.id}/>)}
       </ul>
       {isUserAuth && <ReviewForm id={id} />}
     </section>
@@ -176,6 +188,10 @@ export default function OfferDetailed(): JSX.Element {
   const offersNearby = useAppSelector((state) => state.offersNearby);
   const offerReviews = useAppSelector((state) => state.offerReviews);
 
+  const onAddOfferToFavorite = (o: OfferProps) => {
+    dispatch(addFavoriteOffer({ id: o.id, status: o.isFavorite ? 0 : 1 }));
+  };
+
   useEffect(() => {
     dispatch(fetchOfferById(id ?? ''));
     dispatch(fetchOffersNearby(id ?? ''));
@@ -191,43 +207,8 @@ export default function OfferDetailed(): JSX.Element {
   }
 
   return (
-    <div className="page" key={id}>
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <Link to='/' className="header__logo-link">
-                <img className="header__logo" src="/img/logo.svg" alt="6 cities logo" width="81" height="41" />
-              </Link>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile"
-                    href="#"
-                  >
-                    <div
-                      className="header__avatar-wrapper user__avatar-wrapper"
-                    >
-                    </div>
-                    <span
-                      className="header__user-name user__name"
-                    >Oliver.conner@gmail.com
-                    </span>
-                    <span className="header__favorite-count">3</span>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+    <div className="page">
+      <Header />
       <main className="page__main page__main--offer">
         <section className="offer">
           <ListOfferPhotos {...offer} />
@@ -238,12 +219,7 @@ export default function OfferDetailed(): JSX.Element {
                 <h1 className="offer__name">
                   {offer.title}
                 </h1>
-                <button className="offer__bookmark-button button" type="button">
-                  <svg className="offer__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"></use>
-                  </svg>
-                  <span className="visually-hidden">{offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
-                </button>
+                <BookmarkButton isFavorite={offer.isFavorite} onClick={() => onAddOfferToFavorite(offer)}/>
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">

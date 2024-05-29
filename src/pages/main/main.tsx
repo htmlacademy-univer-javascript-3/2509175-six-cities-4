@@ -111,7 +111,6 @@ export default function MainScreen({ locations }: { locations: City[] }): JSX.El
 
   return (
     <main className="page__main page__main--index">
-      <h1 className="visually-hidden">Cities</h1>
       <ListLocations locations={locations} />
       <div className="cities">
         <div className="cities__places-container container">

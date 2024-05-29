@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { reducer } from './reducer';
 import { createAPI } from '../api';
+import { checkAuth } from './action';
 
 export const api = createAPI();
 export const store = configureStore({
@@ -11,3 +12,5 @@ export const store = configureStore({
       },
     }),
 });
+
+store.dispatch(checkAuth());
