@@ -3,6 +3,7 @@ import { Icon, Marker, layerGroup } from 'leaflet';
 import { City, Point } from '../../types/location';
 import useMap from '../../hooks/use-map';
 import 'leaflet/dist/leaflet.css';
+import { OfferProps } from '../../types/offer';
 
 
 const defaultCustomIcon = new Icon({
@@ -19,11 +20,25 @@ const currentCustomIcon = new Icon({
 
 type MapProps = {
   city: City;
-  points: Point[];
-  selectedPoint?: Point;
+  mapOffers: OfferProps[];
+  selectedOffer: OfferProps | undefined;
+  page: 'cities' | 'offer';
 }
 
-export default function Map({city, points, selectedPoint}: MapProps): JSX.Element {
+function GetPointFromOffer(offer: OfferProps | undefined): Point | undefined {
+  return offer && (
+    {
+      latitude: offer.location.latitude,
+      longitude: offer.location.longitude,
+      title: offer.id
+    }
+  );
+}
+
+export default function Map({city, mapOffers, selectedOffer, page}: MapProps): JSX.Element {
+  const points = mapOffers.map((offer) => GetPointFromOffer(offer)).filter((p) => !!p).map((p) => p as Point);
+  const selectedPoint = GetPointFromOffer(selectedOffer);
+
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
   useEffect(() => {
@@ -61,5 +76,5 @@ export default function Map({city, points, selectedPoint}: MapProps): JSX.Elemen
     }
   }, [map, city]);
 
-  return <section className="cities__map map" ref={mapRef}></section>;
+  return <section className={`${page}__map map`} ref={mapRef}></section>;
 }

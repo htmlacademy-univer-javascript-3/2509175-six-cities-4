@@ -9,6 +9,7 @@ import NotFound from '../../components/errors/404';
 import LoadingSpinner from '../loading/spinner';
 import { UserAuthState } from '../../components/private-route/userAuthState';
 import Header from '../../components/header/header';
+import Map from '../../components/location/map';
 
 function Premium({ isPremium }: OfferWithDetailsProps): false | JSX.Element {
   return (
@@ -238,7 +239,7 @@ export default function OfferDetailed(): JSX.Element {
               <Reviews reviews={offerReviews ?? []} id={id ?? ''} />
             </div>
           </div>
-          <section className="offer__map map"></section>
+          <Map city={{title: offer.city.name, ...offer.city.location}} mapOffers={[offer]} selectedOffer={offer} page='offer'/>
         </section>
         <ListNearPlaces offers={offersNearby ?? []}/>
       </main>
