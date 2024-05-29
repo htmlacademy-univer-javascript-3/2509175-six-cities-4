@@ -5,7 +5,7 @@ import Map from '../../components/location/map';
 import { fetchOffers, pickCity } from '../../store/action';
 import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
 import { OfferProps } from '../../types/offer';
-import { City, Point } from '../../types/location';
+import { City } from '../../types/location';
 import OffersSort from '../../components/offers-sort/offers-sort';
 import { SortStrategy } from '../../components/offers-sort/sort-strategy';
 import LoadingSpinner from '../loading/spinner';
@@ -82,16 +82,6 @@ function ListOffers({ offers, setActiveOffer }: { offers: OfferProps[]; setActiv
   );
 }
 
-function GetPointFromOffer(offer: OfferProps | undefined): Point | undefined {
-  return offer && (
-    {
-      latitude: offer.location.latitude,
-      longitude: offer.location.longitude,
-      title: offer.id
-    }
-  );
-}
-
 export default function MainScreen({ locations }: { locations: City[] }): JSX.Element {
   const dispatch = useAppDispatch();
 
@@ -121,7 +111,7 @@ export default function MainScreen({ locations }: { locations: City[] }): JSX.El
             <ListOffers offers={offers} setActiveOffer={setActiveOffer} />
           </section>
           <div className="cities__right-section">
-            <Map selectedPoint={GetPointFromOffer(activeOffer)} city={currentLocation} points={offers.map((offer) => GetPointFromOffer(offer)).filter((p) => !!p).map((p) => p as Point)} />
+            <Map selectedOffer={activeOffer} city={currentLocation} mapOffers={offers} page='cities'/>
           </div>
         </div>
       </div>
