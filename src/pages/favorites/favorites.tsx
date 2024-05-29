@@ -1,5 +1,10 @@
 import { OfferProps } from '../../types/offer';
 import { FavoriteOffer } from '../../components/offer/offer';
+import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
+import { useEffect } from 'react';
+import { fetchFavoriteOffers } from '../../store/action';
+import Header from '../../components/header/header';
+import { DefaultLocations } from '../../mocks/location';
 
 
 function ListCityFavoriteOffers({ offers }: { offers: OfferProps[] }): JSX.Element {
@@ -24,60 +29,35 @@ function ListCityFavoriteOffers({ offers }: { offers: OfferProps[] }): JSX.Eleme
 }
 
 function ListFavoriteOffers({ offers }: {offers: OfferProps[]}): JSX.Element {
-  // todo const offersByCitiesPartial: Partial<Record<string, OfferProps[]>> = Object.groupBy(offers, (offer: OfferProps) => offer.city.name);
-  const offersByCities = [offers]; // todo Object.values(offersByCitiesPartial);
-  // в гите валится джоба, потому что в версии тс нету групБай
+  const offersByCity : Record<string, OfferProps[]> = offers.reduce<Record<string, OfferProps[]>>((res: Record<string, OfferProps[]>, a: OfferProps) => {
+    res[a.city.name] = res[a.city.name] || [];
+    res[a.city.name].push(a);
+    return res;
+  }, {});
+
   return (
     <ul className="favorites__list">
       {
-        offersByCities.map((offersByCity) => (
-          <ListCityFavoriteOffers offers={offersByCity } key={(offersByCity)[0].city.name}/>
+        DefaultLocations.map((location) => offersByCity[location.title] && (
+          <ListCityFavoriteOffers offers={offersByCity[location.title]} key={location.title}/>
         ))
       }
     </ul>
   );
 }
 
-function Favorites({ favoriteOffers }: { favoriteOffers: OfferProps[] }): JSX.Element {
+function Favorites(): JSX.Element {
+  const dispatch = useAppDispatch();
+
+  const favoriteOffers = useAppSelector((state) => state.favoriteOffers) ?? [];
+
+  useEffect(() => {
+    dispatch(fetchFavoriteOffers());
+  }, [dispatch]);
+
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <a className="header__logo-link" href="markup/main.html">
-                <img className="header__logo" src="/img/logo.svg"
-                  alt="6 cities logo" width="81" height="41"
-                />
-              </a>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile"
-                    href="#"
-                  >
-                    <div
-                      className="header__avatar-wrapper user__avatar-wrapper"
-                    >
-                    </div>
-                    <span
-                      className="header__user-name user__name"
-                    >Oliver.conner@gmail.com
-                    </span>
-                    <span className="header__favorite-count">3</span>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           <section className="favorites">
