@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChangeEvent } from 'react';
 import { useAppDispatch } from '../../hooks/use-store';
-import { addOfferReview } from '../../store/action';
+import { addOfferReview } from '../../store/offer-actions';
 
 export default function ReviewForm({ id }: { id: string }): JSX.Element {
   const dispatch = useAppDispatch();

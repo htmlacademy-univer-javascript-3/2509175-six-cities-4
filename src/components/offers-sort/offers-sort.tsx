@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import React from 'react';
 import { useAppDispatch } from '../../hooks/use-store';
 import { useAppSelector } from '../../hooks/use-store';
-import { chooseSortStrategy } from '../../store/action';
+import { pickSortStrategy } from '../../store/actions';
 import { SortStrategy } from './sort-strategy';
 
 function getNameBySortStrategy(sortStrategy: SortStrategy) {
@@ -27,14 +28,14 @@ function SortStrategyComponent({ sortStrategy, selected, setSortStrategy, closeF
   );
 }
 
-export default function OffersSort() {
+function OffersSort() {
   const [isFormOpened, setIsFormOpened] = useState(false);
 
   const sortStrategy : SortStrategy = useAppSelector((state) => state.sortStrategy);
   const dispatch = useAppDispatch();
 
   const setSortStrategy = (s: SortStrategy) => {
-    dispatch(chooseSortStrategy(s));
+    dispatch(pickSortStrategy(s));
   };
 
   return (
@@ -55,3 +56,5 @@ export default function OffersSort() {
     </form>
   );
 }
+
+export default React.memo(OffersSort);

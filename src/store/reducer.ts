@@ -1,26 +1,14 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { Locations } from '../data/location';
-import { OfferProps, OfferReview, OfferWithDetailsProps } from '../types/offer';
-import { City } from '../types/location';
-import { setOffers, pickCity, chooseSortStrategy, fetchOffers, setCurrentOffer, fetchOfferById, setOffersNearby, fetchOffersNearby, setOfferReviews, fetchOfferReviews, auth, checkAuth, setAuthState, setUserInfo, fetchFavoriteOffers, setFavoriteOffers } from './action';
+import { Locations } from '../components/location/location';
 import { store } from '../store/index';
 import { SortStrategy } from '../components/offers-sort/sort-strategy';
 import { UserAuthState } from '../components/private-route/userAuthState';
-import { UserInfo } from '../components/private-route/user-info';
+import { initialStateType } from '../types/store-state';
 
+import { pickCity, pickSortStrategy } from './actions';
+import { setAuthState, setUserInfo, auth, checkAuth } from './auth-actions';
+import { setOffers, fetchOffers, setCurrentOffer, fetchOfferById, setOffersNearby, fetchOffersNearby, setOfferReviews, fetchOfferReviews, fetchFavoriteOffers, setFavoriteOffers } from './offer-actions';
 
-type initialStateType = {
-  city: City;
-  offers: OfferProps[];
-  sortStrategy: SortStrategy;
-  currentOffer: OfferWithDetailsProps | undefined;
-  offersNearby: OfferProps[] | undefined;
-  offerReviews: OfferReview[] | undefined;
-  favoriteOffers: OfferProps[] | undefined;
-  userAuthState: UserAuthState;
-  userInfo: UserInfo | undefined;
-  isLoading: boolean;
-}
 
 const initialState: initialStateType = {
   city: Locations[3],
@@ -57,7 +45,7 @@ export const reducer = createReducer(initialState, (builder) => {
       state.offerReviews = action.payload;
       state.isLoading = false;
     })
-    .addCase(chooseSortStrategy, (state, action) => {
+    .addCase(pickSortStrategy, (state, action) => {
       state.sortStrategy = action.payload;
       state.isLoading = false;
     })
