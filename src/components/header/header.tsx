@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
-import { unauth } from '../../store/action';
+import { unauth } from '../../store/auth-actions';
 import { UserAuthState } from '../private-route/userAuthState';
 import { Link, NavLink } from 'react-router-dom';
 

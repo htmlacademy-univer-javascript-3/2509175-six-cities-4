@@ -1,52 +1,11 @@
-import { OfferProps } from '../../types/offer';
-import { FavoriteOffer } from '../../components/offer/offer';
 import { useAppDispatch, useAppSelector } from '../../hooks/use-store';
 import { useEffect } from 'react';
-import { fetchFavoriteOffers } from '../../store/action';
+import { fetchFavoriteOffers } from '../../store/offer-actions';
 import Header from '../../components/header/header';
-import { Locations } from '../../data/location';
+import ListFavoriteOffers from './list-favorite-offers';
 
 
-function ListCityFavoriteOffers({ offers }: { offers: OfferProps[] }): JSX.Element {
-  return (
-    <li className="favorites__locations-items">
-      <div className="favorites__locations locations locations--current">
-        <div className="locations__item">
-          <a className="locations__item-link" href="#">
-            <span>{offers[0].city.name}</span>
-          </a>
-        </div>
-      </div>
-      <div className="favorites__places">
-        {
-          offers.map((e) => (
-            <FavoriteOffer offer={e} key={e.id}/>
-          ))
-        }
-      </div>
-    </li>
-  );
-}
-
-function ListFavoriteOffers({ offers }: {offers: OfferProps[]}): JSX.Element {
-  const offersByCity : Record<string, OfferProps[]> = offers.reduce<Record<string, OfferProps[]>>((res: Record<string, OfferProps[]>, a: OfferProps) => {
-    res[a.city.name] = res[a.city.name] || [];
-    res[a.city.name].push(a);
-    return res;
-  }, {});
-
-  return (
-    <ul className="favorites__list">
-      {
-        Locations.map((location) => offersByCity[location.title] && (
-          <ListCityFavoriteOffers offers={offersByCity[location.title]} key={location.title}/>
-        ))
-      }
-    </ul>
-  );
-}
-
-function Favorites(): JSX.Element {
+export default function Favorites(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const favoriteOffers = useAppSelector((state) => state.favoriteOffers) ?? [];
@@ -76,5 +35,3 @@ function Favorites(): JSX.Element {
     </div>
   );
 }
-
-export default Favorites;
